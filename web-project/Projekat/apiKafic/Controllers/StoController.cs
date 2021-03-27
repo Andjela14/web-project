@@ -25,7 +25,7 @@ namespace apiKafic.Controllers
             if(s.Status=="+"){
                 cafe = await Context.Kafic.FindAsync(kaficId);
                 cafe.N++;
-               
+         
             }
             s.Status="Slobodan";
             s.KaficId=kaficId;

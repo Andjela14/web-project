@@ -5948,11 +5948,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Andjela\\Desktop\\web\\Projekat\\apiKafic\\apiKafic.csproj",
+      "projectUniqueName": "C:\\Users\\Andjela\\Desktop\\Projekat\\apiKafic\\apiKafic.csproj",
       "projectName": "apiKafic",
-      "projectPath": "C:\\Users\\Andjela\\Desktop\\web\\Projekat\\apiKafic\\apiKafic.csproj",
+      "projectPath": "C:\\Users\\Andjela\\Desktop\\Projekat\\apiKafic\\apiKafic.csproj",
       "packagesPath": "C:\\Users\\Andjela\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Andjela\\Desktop\\web\\Projekat\\apiKafic\\obj\\",
+      "outputPath": "C:\\Users\\Andjela\\Desktop\\Projekat\\apiKafic\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Andjela\\AppData\\Roaming\\NuGet\\NuGet.Config",

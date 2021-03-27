@@ -90,6 +90,7 @@
     text-align: center;
     height: 85px;
     font-weight: bold;
+    background-color: #80b3ff;
 
 }
 
@@ -211,4 +212,20 @@ h3{
 }
 .divRadio {
     margin: 20px;
+}
+.noneNulaCetiri{
+    pointer-events: none;
+    opacity: 0.4;
+}
+.sakrivenaPor{
+    visibility: hidden;
+    padding: 0px;
+    max-height:0px;
+}
+.Roza{
+    background-color: #d68190;
+}
+
+.Zelena{
+    background-color: #75a3a3;
 }

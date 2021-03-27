@@ -1,10 +1,11 @@
 export class Stavka {
-    constructor(vrsta, cena, naziv,por){
+    constructor(id,vrsta, cena, naziv,por){
       
+        this.id = id;
         this.vrsta=vrsta; 
         this.cena = cena;
         this.naziv=naziv;
-        this.por = por
+        this.por = por;
         
         this.kontStavka=null;
     }
@@ -35,10 +36,40 @@ export class Stavka {
         dugmeObrisiStavku.onclick=(ev)=>{
            
            
+
+            fetch("https://localhost:5001/Stavka/DeleteStavku/" + this.id ,{
+                method: 'DELETE', 
+                headers: {
+                 'Content-type': 'application/json'
+                }
+            }).then(resp =>{
+                if (resp.status == 200) {
+                   
+                    this.por.stavke.splice(this.por.stavke.findIndex(v => v.id==this.id ), 1); 
+                    
+                    if(this.por.stavke.length==0)
+                    {   
+
+                       // document.querySelector(".kontPorudzbina"+this.por.id).remove();
+                        //this.por.stokont.classList.add("Roze");
+                        this.por.sto.Oslobodi(this.por.kontPorudzbina);
+                       // this.por.kontPorudzbina.remove();
+                        ///this.por.kontPorudzbina = null;
+                        
+                    }
+                    thisPok.kontStavka.remove(); //brisi iz baze 
+                   
+                    alert("Stavka Obrisana!");
+                } 
+                else if(resp.status == 404 )
+                    alert("Error 404!");
+                else{
+                    alert(resp.status);
+                }
             
-            thisPok.kontStavka.remove();
+            })
+            
            
-            alert("Stavka Obrisana!");
               
         }
 

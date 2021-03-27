@@ -21,9 +21,21 @@ namespace apiKafic.Controllers
 
         [Route("GetKafic")]
         [HttpGet]
-        public async Task<List<Kafic>> GetKafic(){
+        public async Task<IEnumerable<Kafic>> GetKafic(){
+
            
-            return await Context.Kafic.Include(p=>p.Stolovi).ToListAsync();
+           // return await Context.Kafic.ToListAsync(); 
+            return await Context.Kafic.Include("Stolovi.Porudzbina.Stavke").ToListAsync();
+          /*  List<Kafic> kafici = await Context.Kafic.Include(async p =>
+            {
+                p.Stolovi = await Context.Stolovi.Include(p => p.Porudzbina).FirstOrDefaultAsync();
+            }).ToListAsync();
+           kafici.ForEach(el=>{
+                el.Stolovi.ForEach(async stocic =>{
+                    stocic.Porudzbina = await Context.Porudzbine.Where(st => st.StoId == stocic.Id).FirstOrDefault();
+                });
+            })
+            return kafici;*/
         }
 
         
@@ -31,7 +43,8 @@ namespace apiKafic.Controllers
         [HttpGet]
         [Route("GetKafic/{id}")]
         public async Task<Kafic> GetKafic(int id) {
-            return await Context.Kafic.Include(p=> p.Stolovi).FirstOrDefaultAsync(p => p.Id == id);
+            return await Context.Kafic.Include("Stolovi.Porudzbina.Stavke").FirstOrDefaultAsync(p => p.Id == id);
+          
         }
         
         [HttpPost]

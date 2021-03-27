@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dMkIAyPFeT21DTCcPak8iX+dTJfZv1oSfnv6FhV2HtIttno98gWj4nxK6k+i3wRgJDy6DLR5fCGj3JRix39sfg==",
+  "dgSpecHash": "xLvZ4C/rzfa8ioZ4FcUgjg0+unxwdZcMncs0H7dAo+/gH7oZxgYFYzxcQgEbsYsNajL4fZdqWMPLtdQYmlT4/A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Andjela\\Desktop\\web\\Projekat\\apiKafic\\apiKafic.csproj",
+  "projectFilePath": "C:\\Users\\Andjela\\Desktop\\Projekat\\apiKafic\\apiKafic.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Andjela\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Andjela\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

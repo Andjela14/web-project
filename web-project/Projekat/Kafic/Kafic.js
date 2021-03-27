@@ -1,12 +1,13 @@
 import { Porudzbina } from "./Porudzbina.js";
+import { Stavka } from "./Stavka.js";
 import { Sto } from "./Sto.js";
 
 export class Kafic {
-    constructor(id,n,naziv){
+    constructor(id,n,naziv){   ////////////// svuda gde je this/broj treba da pise this.id
         this.id =id;
         this.n=n; 
-        this.stolovi=[];
         this.naziv=naziv; 
+        this.stolovi=[];
         this.kontKafic = null;
     }
     
@@ -15,10 +16,11 @@ export class Kafic {
         var data = await resp.json();
         this.naziv = data["naziv"];
         this.n = data["n"];
-        var thisPok = this;
         
-        data["stolovi"].forEach(e => {
-            this.stolovi[e.broj] = new Sto(e.id, e.broj,e.status,thisPok);
+      
+        data.stolovi.forEach(e => {
+           this.dodajStoIPorudzbinu(e,e.porudzbina);
+           
         });
       
     }
@@ -26,12 +28,12 @@ export class Kafic {
         this.stolovi[sto.broj]=sto;
     }
     async crtajKafic(host){
-        if (this.name == null) await this.load();
+        if (this.naziv == null) await this.load();
        
         var PokazivacNaKafic = this;
     
         const kontejner = document.createElement("div");
-        kontejner.classList.add ("kontejner");
+        kontejner.classList.add("kontejner");
         this.kontKafic = kontejner;
         const futerDiv = document.createElement("div");
         futerDiv.classList.add("futerDiv");
@@ -128,7 +130,7 @@ export class Kafic {
                 }).then(resp => {
                     if (resp.status == 200) {
                        resp.json().then(id => {
-                                var newSto = new Sto(id,PokazivacNaKafic.n,"Slobodan",PokazivacNaKafic);
+                                var newSto = new Sto(id,PokazivacNaKafic.n,"Slobodan",PokazivacNaKafic.id,null);
                                 this.dodajSto(newSto);
                                 Laba.innerHTML="Broj stolova: "+this.n;
                                 newSto.crtajSto(divZaPorIFormu,divZASto);
@@ -169,7 +171,7 @@ export class Kafic {
                 }).then(resp => {
                     if (resp.status == 200) {
                         resp.json().then(id => {
-                            var newSto = new Sto(id,i,"Slobodan",PokazivacNaKafic);
+                            var newSto = new Sto(id,i,"Slobodan",PokazivacNaKafic.id,null);
                             this.dodajSto(newSto);
                             newSto.crtajSto(divZaPorIFormu,divZASto);
                            
@@ -185,15 +187,14 @@ export class Kafic {
         var niz= [];
         dugme2.onclick=(ev)=>{
             niz = this.stolovi.filter(p=> p.status == "Slobodan" ).map((item) => item.broj);
-            console.log(niz);
+        
             if(!niz.length)
             dugme2.disabled = true;
             else{
             this.formaZaIzborStola(niz,kontejner);
-            glavniDiv.style.pointerEvents= "none";
-            glavniDiv.style.opacity ="0.4";
-            futerDiv.style.pointerEvents = "none";
-            futerDiv.style.opacity = "o.4";
+            glavniDiv.classList.add("noneNulaCetiri");
+            futerDiv.classList.add("noneNulaCetiri");
+            
             }
         }
 
@@ -207,11 +208,11 @@ export class Kafic {
 
     }
     formaZaIzborStola(niz, host){
-        console.log(niz);
+       
         const formaZaIzborSt = document.createElement("div");
         formaZaIzborSt.className = "formaZaIzborSt";
     
-        let p = new Porudzbina(null,null,null); 
+        let p = new Porudzbina(null,null,null,null,null,null); 
         
 
         p.kreirajOpcijezaJela(formaZaIzborSt,niz,"Br.Stola:",0);
@@ -221,10 +222,10 @@ export class Kafic {
         dugmeX.className="dugmeX";
     
         dugmeX.onclick=(ev)=>{
-            this.kontKafic.querySelector(".glavniDiv").style.pointerEvents= "auto"; 
-            this.kontKafic.querySelector(".glavniDiv").style.opacity ="1";
-            this.kontKafic.querySelector(".futerDiv").style.pointerEvents = "auto";
-            this.kontKafic.querySelector(".futerDiv").style.opacity = "1";
+
+            this.kontKafic.querySelector(".glavniDiv").classList.remove("noneNulaCetiri"); 
+            this.kontKafic.querySelector(".futerDiv").classList.remove("noneNulaCetiri"); 
+          
 
             this.kontKafic.removeChild(formaZaIzborSt);
         }
@@ -235,13 +236,13 @@ export class Kafic {
     
         dugmeX.onclick=(ev)=>{
             let div1 = this.kontKafic.querySelector(".glavniDiv");  
-            div1.style.pointerEvents= "auto";
-            div1.style.opacity ="1";
+            div1.classList.remove("noneNulaCetiri"); 
+           
             let div2=this.kontKafic.querySelector(".futerDiv");
-            div2.style.pointerEvents = "auto";
-            div2.style.opacity = "1";
+            div2.classList.remove("noneNulaCetiri"); 
+           
             div1 = this.kontKafic.querySelector(".divZaPorIFormu");
-            console.log(div1);
+           
             div2 = this.kontKafic.querySelector(".divZaSto");
             
             let br = parseInt(document.getElementById("Br.Stola:0").value);
@@ -263,14 +264,14 @@ export class Kafic {
                 }).then(resp => {
                     if (resp.status == 200) {
                         resp.json().then(id => {
-                            this.stolovi[br]= new Sto(id,br,"Slobodan",this.kafic);
+                            this.stolovi[br]= new Sto(id,br,"Slobodan",this.id,null);
                            
                         })
                     }
                 });
             }
 
-            this.stolovi[br].porudzbinica = new Porudzbina(this.br,null,this);
+           
             this.stolovi[br].status = "Zauzet";
             this.stolovi[br].crtajSto(div1,div2); 
             fetch("https://localhost:5001/Sto/ZauzmiSto/" + this.stolovi[br].id, 
@@ -304,5 +305,23 @@ export class Kafic {
         host.appendChild(formaZaIzborSt);
    
     }
-
+    dodajStoIPorudzbinu(el, porudzbina){
+        var st;
+        
+        if(el.status=="Zauzet" && porudzbina!=null){
+        var p = new Porudzbina(porudzbina.id,el.id,el.broj, el.kaficId,null,null,null);
+        porudzbina.stavke.forEach(el=>{
+            p.stavke.push(new Stavka(el.id,el.vrsta,el.cena,el.naziv,p));
+        });
+        }
+        else p=null;
+       
+        st = new Sto(el.id,el.broj,el.status,el.kaficId, p);
+        
+        this.dodajSto(st);
+        if(p!=null){
+        this.stolovi[st.broj].porudzbinica.sto= this.stolovi[st.broj];
+        this.stolovi[st.broj].porudzbinica.stokont = this.stolovi[st.broj].refDiv;
+        }
+    }
 }

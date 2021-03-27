@@ -1,4 +1,5 @@
 import { Kafic } from "./Kafic.js";
+import { Porudzbina } from "./Porudzbina.js";
 import { Sto } from "./Sto.js";
 export class Kontejner{
 
@@ -33,7 +34,7 @@ export class Kontejner{
         divic.appendChild(rad);
         divic.appendChild(lab);
         divRAdio.appendChild(divic);
-        //futerDiv.appendChild(divic);
+       
         divic = document.createElement("div");
         rad = document.createElement("input");
         rad.className = "izbor";
@@ -45,7 +46,7 @@ export class Kontejner{
         divic.appendChild(rad);
         divic.appendChild(lab);
         divRAdio.appendChild(divic);
-        //futerDiv.appendChild(divic);
+      
         divic = document.createElement("div");
         rad = document.createElement("input");
         rad.className = "izbor";
@@ -71,23 +72,19 @@ export class Kontejner{
         }
 
 
-        
 
         futerDiv.appendChild(divRAdio);
-     
-       
-
-       
+    
 
         const dugme = document.createElement("button");
         dugme.innerHTML = "Submit";
-        dugme.style.minWidth = "100px";
+       
         futerDiv.appendChild(dugme);
 
         dugme.onclick = (ev) => {
             let izb = this.kont.querySelector(`input[name='izbor']:checked`).value;
             
-           
+         
             if(izb==1){
                 this.kont.remove();     
                 this.ucitajSve(host);
@@ -104,6 +101,7 @@ export class Kontejner{
             else{
                 
                 divic = document.createElement("div");
+                divic.className = "cena";
                 lab = document.createElement("label");
                 lab.innerHTML = "Ime Kafica : ";
                 divic.appendChild(lab);
@@ -124,8 +122,9 @@ export class Kontejner{
                 divic.appendChild(tb);
                 this.kont.appendChild(divic);
                 const dugme = document.createElement("button");
+               
                 dugme.innerHTML = "Ok";
-                dugme.style.minWidth = "100px";
+               
                 this.kont.appendChild(dugme);
 
                 dugme.onclick = (ev) => {
@@ -150,29 +149,34 @@ export class Kontejner{
     ucitajSve(host){
         this.kont = document.createElement("div");
         var kafici = {};
+        let k = 0;
         fetch("https://localhost:5001/Kafic/GetKafic").then(p => {
         p.json().then(data => {
 
             data.forEach(e => {
-                kafici[e.id] = new Kafic(e.id);
-                kafici[e.id].naziv = e.naziv;
-                kafici[e.id].n = e.broj;
+                kafici[k] = new Kafic(e.id,e.n,e.naziv);
+                
                 e.stolovi.forEach(el => {
-                    
-                    kafici[e.id].stolovi[el.broj] = new Sto(el.id, el.broj,el.status,kafici[e.id]);
+                        
+                        kafici[k].dodajStoIPorudzbinu(el,el.porudzbina);
+                  
+                
                 });
 
-
-
-                kafici[e.id].kontKafic=this.kont;
-                kafici[e.id].crtajKafic(this.kont);
+             
+                
+                kafici[k].kontKafic=this.kont;
+                
+                kafici[k].crtajKafic(this.kont);
+             
                 host.appendChild(this.kont);
+                k++;
             });
         })
     });
     }
     ucitajPrekoIdA(host,id){
-        var kafic = new Kafic(id);
+        var kafic = new Kafic(id,null,null);
 
         this.kont = document.createElement("div");
         kafic.kontKafic=this.kont;
